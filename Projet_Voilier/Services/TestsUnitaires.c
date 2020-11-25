@@ -7,6 +7,7 @@
 #include "PWM.h"
 #include "Encoder.h"
 #include "MyTimer.h"
+#include "Cap.h"
 
 void Conf_Test (void){
 	LL_GPIO_SetPinMode(GPIOC, LL_GPIO_PIN_5, LL_GPIO_MODE_OUTPUT);
@@ -45,4 +46,12 @@ void Test_Servomoteur(void){
 	LL_mDelay(10000);
 	Envoi_Impulsion(TIM1, Calcul_Impulsion(0.0));
 	LL_mDelay(10000);
+}
+void Test_moteur()
+{
+		
+	//moteur
+	init_PinMoteur();
+	demarer_output_PWM();
+	
 }

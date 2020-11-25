@@ -6,8 +6,8 @@
 void (*Ptr_ItFct_ADC)(void);
 int chavirement=0; // Booléen qui vaut 1 si on s'approche du chavirement, cad quand l'angle de roulis > 40, on attend alors 10 sec
 
-#define SEUIL40 0x00FF //Seuil de tension pour un angle de roulis 40º
-
+#define SEUILMAX45 0x759 //Seuil de tension pour un angle de roulis 45º
+#define SEUILMIN45 0x45E //Seuil de tension pour un angle de roulis -45º
 /**
 	* @brief  Réalise le setup des pins pour l'utilisation de l'ADC
   * @note   On met l'entrée de l'ADC sur PC0 (CH10)
@@ -43,11 +43,12 @@ void Conf_ADC (void (*IT_function) (void) ){
 	LL_ADC_SetAnalogWDMonitChannels(ADC1 ,LL_ADC_AWD_CHANNEL_10_REG); 
   // Surveillance sur le channel 10 (peut être 11 si ce n'est pas le bon axe)
 
-	LL_ADC_SetAnalogWDThresholds(ADC1 ,LL_ADC_AWD_THRESHOLD_HIGH , SEUIL40); 
-	// Mettre un seuil correspondant a 40º
-
+	LL_ADC_SetAnalogWDThresholds(ADC1 ,LL_ADC_AWD_THRESHOLD_HIGH , SEUILMAX45); 
+	// Mettre un seuil correspondant a 45º
+	LL_ADC_SetAnalogWDThresholds(ADC1 ,LL_ADC_AWD_THRESHOLD_LOW , SEUILMIN45); 
+	// Mettre un seuil correspondant a -45º
 	LL_ADC_EnableIT_AWD1(ADC1);
-	// Validation de l'interruption de depassement de 40º
+	// Validation de l'interruption de depassement de 45º
 
 	NVIC_EnableIRQ(ADC1_2_IRQn);
 	NVIC_SetPriority(ADC1_2_IRQn, 3);
@@ -55,6 +56,7 @@ void Conf_ADC (void (*IT_function) (void) ){
 	
 	LL_ADC_REG_Init(ADC1,&ADC_REG_InitStruct); 
   // Initialisation de l'ADC par defaut
+	
 }
 
 

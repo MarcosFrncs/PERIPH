@@ -20,7 +20,7 @@
   * @retval None
   */
 void RelachementVoile(void){
-	Envoi_Impulsion(TIM1, Calcul_Impulsion(90.0));
+	Envoi_Impulsion(TIM1, Calcul_Impulsion(0));
 }
 
 /**

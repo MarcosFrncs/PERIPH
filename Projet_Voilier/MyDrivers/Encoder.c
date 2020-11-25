@@ -4,8 +4,8 @@
 #include "stm32f1xx_ll_gpio.h"
 
 
-#define PSMAX 90 // Impulsion pour avoir un angle de voile theta maximal
-#define PSMIN -90 // Impulsion pour avoir un angle de voile theta minimal
+#define PSMAX 0 // Impulsion pour avoir un angle de voile theta maximal
+#define PSMIN 90 // Impulsion pour avoir un angle de voile theta minimal
 
 
 /**
@@ -40,7 +40,7 @@ TIM_EncoderInitStruct.EncoderMode = LL_TIM_ENCODERMODE_X4_TI12;
 	//Initialisation de encoder mode
 LL_TIM_ENCODER_Init(TIM3,&TIM_EncoderInitStruct);
 
-Timer->ARR = 0x167;
+Timer->ARR = 0x05A1; //0x165
 	
 Conf_IO_Girouette();
 }
@@ -63,14 +63,16 @@ void Detection_Angle0(void){
   */
 float Calcul_Theta(volatile unsigned int *alpha){
 	float theta;
-	if (*alpha<45 || *alpha>315){
+	float aux;
+	aux=*alpha * 360.0 / 0x05A1;
+	if (aux<45 || aux>315){
 		theta=0;
 	}else{
-		if (*alpha>=45 && *alpha<=180){
-			theta=(2.0/3.0)* *alpha-30;
+		if (aux>=45 && aux<=180){
+			theta=(2.0/3.0)* aux-30;
 		}else{
-			if (*alpha>180 && *alpha<=315){
-			theta=(2.0/3.0)* *alpha-210;
+			if (aux>180 && aux<=315){
+			theta=0; // au debut on croyait que theta pouvait varier entre -90 et 90 (2.0/3.0)* *alpha-210;
 			}
 		}
 	}
@@ -84,5 +86,5 @@ return theta;
   * @retval Représente le temps (le duty-cycle plutôt), on l'utilisera pour agir sur le CCR1 du TIM1 en PWM
   */
 float Calcul_Impulsion(float theta){
-	return (theta-PSMIN)/(PSMAX-PSMIN)+1;
+	return 2 - (theta-PSMAX)/(PSMIN-PSMAX);
 }

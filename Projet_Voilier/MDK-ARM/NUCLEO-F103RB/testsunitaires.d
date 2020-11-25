@@ -15,3 +15,4 @@ nucleo-f103rb\testsunitaires.o: ..\LLDrivers\inc\stm32f1xx_ll_utils.h
 nucleo-f103rb\testsunitaires.o: ..\MyDrivers\PWM.h
 nucleo-f103rb\testsunitaires.o: ..\MyDrivers\Encoder.h
 nucleo-f103rb\testsunitaires.o: ..\MyDrivers\MyTimer.h
+nucleo-f103rb\testsunitaires.o: ..\Services\Cap.h

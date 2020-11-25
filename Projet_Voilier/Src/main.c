@@ -26,6 +26,7 @@
 #include "ADC.h"
 #include "Encoder.h"
 
+#include "Cap.h" 
 #include "BordageAutomatique.h"
 #include "AntiChavirement.h"
 
@@ -51,13 +52,19 @@ int main(void)
 	
   // On configure les éléments du bordage automatique
 	ConfigBordage(TIM1,TIM3);
+	// On configure la gestion du cap grace a la t€l€commqnde RF
+	init_cap();
 	// On configure les éléments de l'anti chavirement
 	ConfigChavirement();
+	
+	// Lignes de test pour les impulsions min et max du servo-moteur
+	//Envoi_Impulsion(TIM3,1.0);
+	//Envoi_Impulsion(TIM3,2.0);
 	
   /* Infinite loop */
   while (1)
   {
-		
+
   }
 }
 
@@ -90,7 +97,7 @@ void SystemClock_Config(void)
   /* Enable HSE oscillator */
 	// ********* Commenter la ligne ci-dessous pour MCBSTM32 *****************
 	// ********* Conserver la ligne si Nucléo*********************************
-  LL_RCC_HSE_EnableBypass();
+  //LL_RCC_HSE_EnableBypass();
   LL_RCC_HSE_Enable();
   while(LL_RCC_HSE_IsReady() != 1)
   {
@@ -139,7 +146,7 @@ void SysTick_Handler(void)  {
         delayChavirement++ ;
     }
     else {
-			if (delayPWM==50){ // chaque 0.5s
+			if (delayPWM>=50){ // chaque 0.5s
 				AsservBordage(TIM1,TIM3);
 				delayPWM=0;
 			}

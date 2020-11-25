@@ -14,5 +14,8 @@ nucleo-f103rb\main.o: ..\MyDrivers\MyTimer.h
 nucleo-f103rb\main.o: ..\MyDrivers\PWM.h
 nucleo-f103rb\main.o: ..\MyDrivers\ADC.h
 nucleo-f103rb\main.o: ..\MyDrivers\Encoder.h
+nucleo-f103rb\main.o: ..\Services\Cap.h
+nucleo-f103rb\main.o: ..\LLDrivers\inc\stm32f1xx_ll_gpio.h
+nucleo-f103rb\main.o: ..\LLDrivers\inc\stm32f1xx_ll_tim.h
 nucleo-f103rb\main.o: ..\Services\BordageAutomatique.h
 nucleo-f103rb\main.o: ..\Services\AntiChavirement.h

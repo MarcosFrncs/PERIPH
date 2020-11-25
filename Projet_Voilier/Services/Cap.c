@@ -93,7 +93,7 @@ void init_outputPWM()
 	MyTimer_Conf(TIM2,(ARR_TIM2-1),1); //On prendra F=10KHz (2*3600*10Khz=72Mhz)
 	LL_TIM_OC_SetMode	(	TIM2,LL_TIM_CHANNEL_CH2,LL_TIM_OCMODE_PWM1);	
 	LL_TIM_OC_SetIdleState	(	TIM2,LL_TIM_CHANNEL_CH2,LL_TIM_OCIDLESTATE_LOW); 
-	LL_TIM_OC_SetCompareCH2	(	TIM2,ARR_TIM2*0.5); 
+	LL_TIM_OC_SetCompareCH2	(	TIM2,ARR_TIM2*0); 
 
 }
 
@@ -141,6 +141,7 @@ void init_cap()
 	
 	//moteur
 	init_PinMoteur();
+	init_outputPWM();
 	demarer_output_PWM();
 	demarer_capture_PWM();
 	
@@ -161,9 +162,11 @@ float get_info_RF()
 	t_on=LL_TIM_IC_GetCaptureCH2(TIM4); //comrpirs entre 40 et 80 // 1 dans le conmpteur correspond a 5%
 		
 	
-	if(t_on>((FREQUENCE_T4*PERIODE_N_PWM)-2) && t_on<((FREQUENCE_T4*PERIODE_N_PWM)+2)) //Pour pallier au erreur de la période envoyée 
+	if(((t_on>=((FREQUENCE_T4*PERIODE_N_PWM)-1)) && (t_on<=((FREQUENCE_T4*PERIODE_N_PWM)+1))) || t_on==0) //Pour pallier au erreur de la période envoyée 
 	{
+		
 		retour=0;
+		return(retour);	
 	}
 	else 
 	{
@@ -189,21 +192,21 @@ float get_info_RF()
 	* @param  dutycycle
   * @retval Aucun
   */
-void controle_moteur(float pwm)
+void controle_moteur(float dutycycle)
 {
-	if(pwm<0) 
+	if(dutycycle<0) 
 	{
-		MyTimer_Conf(TIM4,0xFFFFFFF,179);
-		pwm=-pwm;
 		
-		LL_GPIO_ResetOutputPin (GPIO_MOTEUR, MSK_SENS);
-		LL_TIM_OC_SetCompareCH2	(	TIM2,ARR_TIM2*pwm); 
+		dutycycle=-dutycycle;
+		
+		LL_GPIO_ResetOutputPin (GPIO_MOTEUR, SENS);
+		LL_TIM_OC_SetCompareCH2	(	TIM2,ARR_TIM2*dutycycle); 
 		
 	}
 	else
 	{
-		LL_GPIO_SetOutputPin (GPIO_MOTEUR, MSK_SENS);
-		LL_TIM_OC_SetCompareCH2	(	TIM2,ARR_TIM2*pwm);	
+		LL_GPIO_SetOutputPin (GPIO_MOTEUR, SENS);
+		LL_TIM_OC_SetCompareCH2	(	TIM2,ARR_TIM2*dutycycle);	
 	}
 	
 }

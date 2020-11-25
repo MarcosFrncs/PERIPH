@@ -13,7 +13,7 @@ Service permettant de gérer l'orientation du cap en fonction d'un signal PWM ent
 
 /*Define*/
 //Valeur 
-#define PERIODE_S_IN_PWM 20 //20ms
+#define PERIODE_S_IN_PWM 13.6 //13.6ms
 #define PERIODE_MIN_PWM  1  //1ms
 #define PERIODE_N_PWM    1.5//1.5ms
 #define PERIODE_MAX_PWM 	 2 //2ms
@@ -117,5 +117,5 @@ void demarer_output_PWM(void);
 	* @param  dutycycle
   * @retval Aucun
   */
-void controle_moteur(float pwm);
+void controle_moteur(float dutycycle);
 #endif
